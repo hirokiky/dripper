@@ -23,7 +23,7 @@ class DictDripper(object):
 
     def __call__(self, converting):
         dug_in = dig_in(converting, self.source_root)
-        return {key: dripper(dug_in) for key, dripper in self.drippers.items()}
+        return {key: d(dug_in) for key, d in self.drippers.items()}
 
 
 class ListDripper(object):
