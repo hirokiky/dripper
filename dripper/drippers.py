@@ -40,6 +40,9 @@ def dripper_factory(declaration):
     if isinstance(declaration, list):
         return ValueDripper(declaration)
 
+    elif callable(declaration):
+        return declaration
+
     elif isinstance(declaration, dict):
         drippers_dec = {k: v for k, v in declaration.items()
                         if not k.startswith('__') and not k.endswith('__')}

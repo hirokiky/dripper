@@ -27,6 +27,7 @@ class TestConverter(TestCase):
                 "__source_root__": ['body', 'articles'],
 
                 "title": ["title"],
+                "title_lower": lambda d: d['title'].lower(),
                 "published": ["published", "date", 0],
             },
             "meta": {
@@ -41,6 +42,7 @@ class TestConverter(TestCase):
             {
                 "articles": [
                     {'title': "Title",
+                     'title_lower': 'title',
                      'published': "2014-11-05"},
                 ],
                 "meta": {
