@@ -66,3 +66,42 @@ And just use like this.
         },
         "asset_type": 1,
     }
+
+Advanced
+========
+
+Converting
+----------
+
+Use ``dripper.ValueDripper`` to pass converter function.
+
+.. code-block:: python
+
+    import dripper
+
+    declaration = {
+        "title": dripper.ValueDripper(["title"], converter=lambda s: s.lower())
+    }
+
+    d = dripper.dripper_factory(declaration)
+    d({"title": "TITLE"}) == {"title": "title"}
+
+
+Technically, each ends (list) will be replaced by instance of ``dripper.ValueDripper``.
+
+Combining
+---------
+
+By combining ``dripper.ValueDripper``, result value of that key will be combined.
+
+.. code-block:: python
+
+    import dripper
+
+    declaration = {
+        "fullname": (dripper.ValueDripper(["firstname"]) +
+                     dripper.ValueDripper(["lastname"]))
+    }
+
+    d = dripper.dripper_factory(declaration)
+    d({"firstname": "Hrioki", "lastname": "Kiyohara"}) == {"fullname": "HriokiKiyohara"}
