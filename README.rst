@@ -46,7 +46,6 @@ Defile 'declaration' dictionary to drip essential data.
             "__source_root__": ["meta", "meta1", "meta3", 1],
 
             "author": ["author"],
-            "author_lower": lambda d: d["author"].lower(),  # Pass a callable accepting one argument ('meta' dictionary)
         },
         "asset_type": ["meta", "meta4", "assetType"],
     }
@@ -64,7 +63,6 @@ And just use like this.
         ],
         "meta": {
             "author": "Author name",
-            "author_lower": "author name",
         },
         "asset_type": 1,
     }

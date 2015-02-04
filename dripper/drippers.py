@@ -1,19 +1,34 @@
 from copy import deepcopy
+import operator
+
+from dripper.compat import reduce
+from dripper.exceptions import DrippingError
 
 
 def dig_in(source, items):
     digging = deepcopy(source)
     for item in items:
-        digging = digging[item]
+        try:
+            digging = digging[item]
+        except (TypeError, KeyError, IndexError):
+            raise DrippingError
     return digging
 
 
 class ValueDripper(object):
-    def __init__(self, source_root):
+    def __init__(self, source_root, converter=None):
         self.source_root = source_root
+        assert converter is None or callable(converter), "converter argument should be callable."
+        self.converter = converter
 
     def __call__(self, converting):
-        return dig_in(converting, self.source_root)
+        dug_in = dig_in(converting, self.source_root)
+        if self.converter:
+            return self.converter(dug_in)
+        return dug_in
+
+    def __add__(self, other):
+        return MixDripper((self, other))
 
 
 class DictDripper(object):
@@ -22,8 +37,11 @@ class DictDripper(object):
         self.drippers = drippers
 
     def __call__(self, converting):
-        dug_in = dig_in(converting, self.source_root)
-        return {key: d(dug_in) for key, d in self.drippers.items()}
+        try:
+            dug_in = dig_in(converting, self.source_root)
+            return {key: d(dug_in) for key, d in self.drippers.items()}
+        except DrippingError:
+            return {}
 
 
 class ListDripper(object):
@@ -32,8 +50,22 @@ class ListDripper(object):
         self.drippers = drippers
 
     def __call__(self, converting):
+        try:
+            dug_in = dig_in(converting, self.source_root)
+        except DrippingError:
+            return []
+
         dict_dripper = DictDripper([], self.drippers)
-        return [dict_dripper(dug_in) for dug_in in dig_in(converting, self.source_root)]
+        return [dict_dripper(d) for d in dug_in]
+
+
+class MixDripper(object):
+    def __init__(self, drippers, mixer=operator.add):
+        self.drippers = drippers
+        self.mixer = mixer
+
+    def __call__(self, converting):
+        return reduce(self.mixer, (d(converting) for d in self.drippers))
 
 
 def dripper_factory(declaration):

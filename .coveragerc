@@ -1,3 +1,4 @@
 [report]
 include = dripper/**
 omit = tests/**
+       dripper/compat.py

@@ -22,15 +22,18 @@ class TestDigIn(TestCase):
         self.assertEqual(actual, 'learning python')
 
     def test__key_error(self):
-        with self.assertRaises(KeyError):
+        from dripper.exceptions import DrippingError
+        with self.assertRaises(DrippingError):
             self._callFUT({}, ['bomb'])
 
     def test__type_error(self):
-        with self.assertRaises(TypeError):
+        from dripper.exceptions import DrippingError
+        with self.assertRaises(DrippingError):
             self._callFUT([], ['bomb'])
 
     def test__index_error(self):
-        with self.assertRaises(IndexError):
+        from dripper.exceptions import DrippingError
+        with self.assertRaises(DrippingError):
             self._callFUT([], [10000])
 
 
@@ -43,6 +46,20 @@ class TestValueDripper(TestCase):
         target = self._makeOne(['title'])
         actual = target({'title': 'learning python'})
         self.assertEqual(actual, 'learning python')
+
+    def test__converter(self):
+        target = self._makeOne(['asset_type'], converter=int)
+        actual = target({'asset_type': '1'})
+        self.assertEqual(actual, 1)
+
+    def test__add(self):
+        from dripper.drippers import MixDripper
+        target1 = self._makeOne(['title1'])
+        target2 = self._makeOne(['title2'])
+        actual = target1 + target2
+        self.assertIsInstance(actual, MixDripper)
+        self.assertEqual(actual.drippers[0], target1)
+        self.assertEqual(actual.drippers[1], target2)
 
 
 class TestDictDripper(TestCase):
@@ -58,6 +75,21 @@ class TestDictDripper(TestCase):
         actual = target({'meta': {'title': 'learning python'}})
         self.assertEqual(actual, {'title': 'learning python'})
 
+    def test__invalid_source_root(self):
+        target = self._makeOne(['bomb'], {})
+        actual = target({'meta': {'title': 'learning python'}})
+        self.assertEqual(actual, {})
+
+    def test__invalid_value(self):
+        from dripper.exceptions import DrippingError
+
+        def bomb_dripper(converting):
+            raise DrippingError
+
+        target = self._makeOne(['meta'], {'title': bomb_dripper})
+        actual = target({'meta': {'title': 'learning python'}})
+        self.assertEqual(actual, {})
+
 
 class TestListDripper(TestCase):
     def _makeOne(self, *args, **kwargs):
@@ -71,6 +103,21 @@ class TestListDripper(TestCase):
         target = self._makeOne(['meta'], {'title': title_dripper})
         actual = target({'meta': [{'title': 'learning python'}, {'title': 'python cookbook'}]})
         self.assertEqual(actual, [{'title': 'learning python'}, {'title': 'python cookbook'}])
+
+    def test__invalid_source_root(self):
+        target = self._makeOne(['bomb'], {})
+        actual = target({'meta': [{'title': 'learning python'}]})
+        self.assertEqual(actual, [])
+
+    def test__invalid_value(self):
+        from dripper.exceptions import DrippingError
+
+        def bomb_dripper(converting):
+            raise DrippingError
+
+        target = self._makeOne(['meta'], {'title': bomb_dripper})
+        actual = target({'meta': [{'title': 'learning python'}, {'title': 'learning python'}]})
+        self.assertEqual(actual, [{}, {}])
 
 
 class TestDripperFactory(TestCase):
@@ -121,6 +168,26 @@ class TestDripperFactory(TestCase):
         self.assertEqual(actual.source_root, ['hoge'])
         self.assertIsInstance(actual.drippers['foo'], ValueDripper)
         self.assertEqual(actual.drippers['foo'].source_root, ['fuga', 'piyo'])
+
+
+class TestMixDripper(TestCase):
+    def _makeOne(self, *args, **kwargs):
+        from dripper.drippers import MixDripper
+        return MixDripper(*args, **kwargs)
+
+    def test__call(self):
+        target = self._makeOne((lambda d: d['foo'],
+                                lambda d: d['bar']))
+        actual = target({'foo': 'Foo', 'bar': 'Bar'})
+        self.assertEqual(actual, 'FooBar')
+
+    def test__mixer(self):
+        import operator
+        target = self._makeOne((lambda d: d['foo'],
+                                lambda d: d['bar']),
+                               mixer=operator.sub)
+        actual = target({'foo': 3, 'bar': 2})
+        self.assertEqual(actual, 1)
 
 
 class TestDripper(TestCase):

@@ -1,0 +1,2 @@
+class DrippingError(Exception):
+    pass

@@ -1,3 +1,9 @@
+0.2
+---
+
+- Improved error handling.
+- Added MixDripper.
+
 0.1
 ---
 
