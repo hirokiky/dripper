@@ -19,7 +19,7 @@ setup(
     install_requires=[],
     description='Cleaning your messy data.',
     long_description=README + '\n\n' + CHANGES,
-    author='Hiroki KIYOHAAR',
+    author='Hiroki KIYOHARA',
     author_email='hirokiky@gmail.com',
     url='https://github.com/hirokiky/dripper',
     keywords='dict data converter cleaning mapping',
