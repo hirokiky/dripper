@@ -130,6 +130,26 @@ class TestListDripper(TestCase):
         self.assertEqual(actual, [{}, {}])
 
 
+class TestMixDripper(TestCase):
+    def _makeOne(self, *args, **kwargs):
+        from dripper.drippers import MixDripper
+        return MixDripper(*args, **kwargs)
+
+    def test__call(self):
+        target = self._makeOne((lambda d: d['foo'],
+                                lambda d: d['bar']))
+        actual = target({'foo': 'Foo', 'bar': 'Bar'})
+        self.assertEqual(actual, 'FooBar')
+
+    def test__mixer(self):
+        import operator
+        target = self._makeOne((lambda d: d['foo'],
+                                lambda d: d['bar']),
+                               mixer=operator.sub)
+        actual = target({'foo': 3, 'bar': 2})
+        self.assertEqual(actual, 1)
+
+
 class TestDripperFactory(TestCase):
     def _callFUT(self, *args, **kwargs):
         from dripper.drippers import dripper_factory
@@ -184,26 +204,6 @@ class TestDripperFactory(TestCase):
         self.assertEqual(actual.source_root, ['hoge'])
         self.assertIsInstance(actual.drippers['foo'], ValueDripper)
         self.assertEqual(actual.drippers['foo'].source_root, ['fuga', 'piyo'])
-
-
-class TestMixDripper(TestCase):
-    def _makeOne(self, *args, **kwargs):
-        from dripper.drippers import MixDripper
-        return MixDripper(*args, **kwargs)
-
-    def test__call(self):
-        target = self._makeOne((lambda d: d['foo'],
-                                lambda d: d['bar']))
-        actual = target({'foo': 'Foo', 'bar': 'Bar'})
-        self.assertEqual(actual, 'FooBar')
-
-    def test__mixer(self):
-        import operator
-        target = self._makeOne((lambda d: d['foo'],
-                                lambda d: d['bar']),
-                               mixer=operator.sub)
-        actual = target({'foo': 3, 'bar': 2})
-        self.assertEqual(actual, 1)
 
 
 class TestDripper(TestCase):
