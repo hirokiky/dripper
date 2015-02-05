@@ -1,7 +1,10 @@
+CHANGES
+=======
+
 0.3
 ---
 
-- Fixed to accept string or integer directly.
+- Fixed to accept string or integer directly as source_root.
 
 0.2
 ---
