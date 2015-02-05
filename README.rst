@@ -39,13 +39,13 @@ Defile 'declaration' dictionary to drip essential data.
             "__type__": "list",  # 'articles' is list of dictionary
             "__source_root__": ['body', 'articles'],  # The root position of 'articles'
     
-            "title": ["title"],  # each dictionary of 'articles' will contain 'title'
+            "title": "title",  # each dictionary of 'articles' will contain 'title'
             "published": ["published", "date", 0],  # and 'published'. you can pass the path to the value
         },
         "meta": {
             "__source_root__": ["meta", "meta1", "meta3", 1],
 
-            "author": ["author"],
+            "author": "author",
         },
         "asset_type": ["meta", "meta4", "assetType"],
     }

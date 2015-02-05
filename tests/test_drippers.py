@@ -42,6 +42,16 @@ class TestValueDripper(TestCase):
         from dripper.drippers import ValueDripper
         return ValueDripper(*args, **kwargs)
 
+    def test__init__str(self):
+        target = self._makeOne('title')
+        actual = target({'title': 'learning python'})
+        self.assertEqual(actual, 'learning python')
+
+    def test__init__int(self):
+        target = self._makeOne(1)
+        actual = target(['dive into python', 'learning python'])
+        self.assertEqual(actual, 'learning python')
+
     def test__call(self):
         target = self._makeOne(['title'])
         actual = target({'title': 'learning python'})
@@ -124,6 +134,12 @@ class TestDripperFactory(TestCase):
     def _callFUT(self, *args, **kwargs):
         from dripper.drippers import dripper_factory
         return dripper_factory(*args, **kwargs)
+
+    def test__str(self):
+        from dripper.drippers import ValueDripper
+        actual = self._callFUT('foo')
+        self.assertIsInstance(actual, ValueDripper)
+        self.assertEqual(actual.source_root, ('foo',))
 
     def test__list(self):
         from dripper.drippers import ValueDripper
@@ -215,13 +231,13 @@ class TestDripper(TestCase):
                 "__type__": "list",
                 "__source_root__": ['body', 'articles'],
 
-                "title": ["title"],
+                "title": "title",
                 "title_lower": lambda d: d['title'].lower(),
                 "published": ["published", "date", 0],
             },
             "meta": {
                 "__source_root__": ["meta", "meta1", "meta3", 0],
-                "author": ["author"],
+                "author": "author",
             },
             "asset_type": ["meta", "meta4", "assetType"],
         }

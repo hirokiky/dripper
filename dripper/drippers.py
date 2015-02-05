@@ -17,7 +17,10 @@ def dig_in(source, items):
 
 class ValueDripper(object):
     def __init__(self, source_root, converter=None):
-        self.source_root = source_root
+        if isinstance(source_root, (str, int)):
+            self.source_root = (source_root,)
+        else:
+            self.source_root = source_root
         assert converter is None or callable(converter), "converter argument should be callable."
         self.converter = converter
 
@@ -69,7 +72,7 @@ class MixDripper(object):
 
 
 def dripper_factory(declaration):
-    if isinstance(declaration, list):
+    if isinstance(declaration, (list, tuple, int, str)):
         return ValueDripper(declaration)
 
     elif callable(declaration):
