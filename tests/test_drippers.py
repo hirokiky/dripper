@@ -77,6 +77,11 @@ class TestDictDripper(TestCase):
         from dripper.drippers import DictDripper
         return DictDripper(*args, **kwargs)
 
+    def test__init__str(self):
+        actual = self._makeOne('title', ["dripper"])
+        self.assertEqual(actual.source_root, ("title",))
+        self.assertEqual(actual.drippers, ["dripper"])
+
     def test__call(self):
         def title_dripper(converting):
             return converting['title']
@@ -105,6 +110,11 @@ class TestListDripper(TestCase):
     def _makeOne(self, *args, **kwargs):
         from dripper.drippers import ListDripper
         return ListDripper(*args, **kwargs)
+
+    def test__init__str(self):
+        actual = self._makeOne('title', ["dripper"])
+        self.assertEqual(actual.source_root, ("title",))
+        self.assertEqual(actual.drippers, ["dripper"])
 
     def test__call(self):
         def title_dripper(converting):

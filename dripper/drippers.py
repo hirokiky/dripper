@@ -36,7 +36,10 @@ class ValueDripper(object):
 
 class DictDripper(object):
     def __init__(self, source_root, drippers):
-        self.source_root = source_root
+        if isinstance(source_root, (str, int)):
+            self.source_root = (source_root,)
+        else:
+            self.source_root = source_root
         self.drippers = drippers
 
     def __call__(self, converting):
@@ -49,7 +52,10 @@ class DictDripper(object):
 
 class ListDripper(object):
     def __init__(self, source_root, drippers):
-        self.source_root = source_root
+        if isinstance(source_root, (str, int)):
+            self.source_root = (source_root,)
+        else:
+            self.source_root = source_root
         self.drippers = drippers
 
     def __call__(self, converting):
