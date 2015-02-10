@@ -59,6 +59,25 @@ Now let the hack begin with the ``dripper``.
         "published_date": "2014-11-05",
     }
 
+Installation
+============
+
+Just use pip to install
+
+.. code-block:: console
+
+    pip install dripper
+
+Requirements
+------------
+
+``dripper`` won't require any kind of outer libraries.
+Supporting Python versions are:
+
+* Python 2.7
+* Python 3.3
+* Python 3.4
+
 Basics
 ======
 
@@ -191,6 +210,23 @@ Use ``dripper.ValueDripper`` to pass converter function.
     }
     d = dripper.dripper_factory(declaration)
     d({"title": "TITLE"}) == {"title": "title"}
+
+
+Technically, each ends (list) will be replaced by instance of ``dripper.ValueDripper``.
+
+default value
+-------------
+
+Use ``dripper.ValueDripper`` to pass converter function.
+
+.. code-block:: python
+
+    import dripper
+    declaration = {
+        "title": dripper.ValueDripper(["title"], default="default")
+    }
+    d = dripper.dripper_factory(declaration)
+    d({}) == {"title": "default"}
 
 
 Technically, each ends (list) will be replaced by instance of ``dripper.ValueDripper``.

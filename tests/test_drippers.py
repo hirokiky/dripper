@@ -62,6 +62,17 @@ class TestValueDripper(TestCase):
         actual = target({'asset_type': '1'})
         self.assertEqual(actual, 1)
 
+    def test__default(self):
+        target = self._makeOne(['kadoom'], default='default')
+        actual = target({})
+        self.assertEqual(actual, 'default')
+
+    def test__error(self):
+        from dripper.drippers import DrippingError
+        target = self._makeOne(['kadoom'])
+        with self.assertRaises(DrippingError):
+            target({})
+
     def test__add(self):
         from dripper.drippers import MixDripper
         target1 = self._makeOne(['title1'])

@@ -16,16 +16,23 @@ def dig_in(source, items):
 
 
 class ValueDripper(object):
-    def __init__(self, source_root, converter=None):
+    def __init__(self, source_root, converter=None, default=None):
         if isinstance(source_root, (str, int)):
             self.source_root = (source_root,)
         else:
             self.source_root = source_root
         assert converter is None or callable(converter), "converter argument should be callable."
         self.converter = converter
+        self.default = default
 
     def __call__(self, converting):
-        dug_in = dig_in(converting, self.source_root)
+        try:
+            dug_in = dig_in(converting, self.source_root)
+        except DrippingError:
+            if self.default is not None:
+                return self.default
+            else:
+                raise
         if self.converter:
             return self.converter(dug_in)
         return dug_in
