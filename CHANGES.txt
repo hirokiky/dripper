@@ -1,6 +1,11 @@
 CHANGES
 =======
 
+1.0
+---
+
+- Officially supported Python 3.5
+
 0.3.1
 -----
 
