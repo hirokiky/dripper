@@ -10,6 +10,7 @@ CHANGES
     will raise ``DrippingError``
   - In order to this behavior ``DictDripper`` will return empty dict
     when inner value dripper could not dig out values
+  - Thanks for @bungoume to suggest this behavior
 
 1.0
 ---
