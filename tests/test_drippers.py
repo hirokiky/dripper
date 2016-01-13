@@ -68,10 +68,9 @@ class TestValueDripper(TestCase):
         self.assertEqual(actual, 'default')
 
     def test__error(self):
-        from dripper.drippers import DrippingError
         target = self._makeOne(['kadoom'])
-        with self.assertRaises(DrippingError):
-            target({})
+        actual = target({})
+        self.assertIsNone(actual)
 
     def test__add(self):
         from dripper.drippers import MixDripper

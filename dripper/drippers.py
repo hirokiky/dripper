@@ -29,10 +29,7 @@ class ValueDripper(object):
         try:
             dug_in = dig_in(converting, self.source_root)
         except DrippingError:
-            if self.default is not None:
-                return self.default
-            else:
-                raise
+            return self.default
         if self.converter:
             return self.converter(dug_in)
         return dug_in
