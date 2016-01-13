@@ -218,7 +218,8 @@ Technically, each ends (list) will be replaced by instance of ``dripper.ValueDri
 default value
 -------------
 
-Use ``dripper.ValueDripper`` to pass converter function.
+Specify ``default`` keyword argument to change default value.
+``None`` will be applied as default.
 
 .. code-block:: python
 

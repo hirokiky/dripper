@@ -13,7 +13,7 @@ with open(os.path.join(here, 'CHANGES.txt')) as f:
 
 setup(
     name='dripper',
-    version='1.0',
+    version='1.1',
     license='MIT',
     packages=['dripper'],
     install_requires=[],
