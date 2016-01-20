@@ -8,3 +8,4 @@ htmlcov/
 dist
 docstore/*/build
 .idea
+env/
