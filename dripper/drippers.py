@@ -1,4 +1,3 @@
-from copy import deepcopy
 import operator
 
 from dripper.compat import reduce
@@ -6,7 +5,7 @@ from dripper.exceptions import DrippingError
 
 
 def dig_in(source, items):
-    digging = deepcopy(source)
+    digging = source
     for item in items:
         try:
             digging = digging[item]
