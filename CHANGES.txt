@@ -1,6 +1,14 @@
 CHANGES
 =======
 
+1.2
+----
+
+- Avoid deepcopy to improve speed
+
+  - https://github.com/hirokiky/dripper/pull/6
+  - Thanks @afiram
+
 1.1
 ---
 
