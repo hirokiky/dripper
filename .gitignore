@@ -9,3 +9,5 @@ dist
 docstore/*/build
 .idea
 env/
+build/
+.DS_Store
